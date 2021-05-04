@@ -12,6 +12,7 @@ class SlowFruit(Sprite):
         super().__init__(app, 'images/apple.png', x, y)
 
         self.app = app
+        self.type = 1
 
     def update(self):
         self.x -= FRUIT_SLOW_SPEED
@@ -25,6 +26,7 @@ class FastFruit(Sprite):
         super().__init__(app, 'images/banana.png', x, y)
 
         self.app = app
+        self.type = 2
 
     def update(self):
         self.x -= FRUIT_FAST_SPEED
@@ -38,6 +40,7 @@ class SlideFruit(Sprite):
         super().__init__(app, 'images/cherry.png', x, y)
 
         self.app = app
+        self.type = 3
         self.direction = randint(0,1)*2 - 1
 
     def update(self):
@@ -53,6 +56,7 @@ class CurvyFruit(Sprite):
         super().__init__(app, 'images/pear.png', x, y)
 
         self.app = app
+        self.type = 4
         self.t = randint(0,360) * 2 * math.pi / 360
 
     def update(self):
@@ -82,7 +86,8 @@ class Cat(Sprite):
     def check_collision(self, fruit):
         if self.distance_to(fruit) <= CAT_CATCH_DISTANCE:
             fruit.to_be_deleted = True
-            self.app.score += 1
+
+            self.app.score += fruit.type
             self.app.update_score()
 
 
