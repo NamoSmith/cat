@@ -71,6 +71,9 @@ class Cat(Sprite):
         self.app = app
         self.direction = None
 
+        self.direction = DIR_STILL
+        self.next_direction = DIR_STILL
+
     def update(self):
         if self.direction == CAT_UP:
             if self.y >= CAT_MARGIN:
@@ -85,6 +88,9 @@ class Cat(Sprite):
             self.app.score += 1
             self.app.update_score()
 
+    def set_next_direction(self, direction):
+        self.next_direction = direction
+
 
 class CatGame(GameApp):
     def init_game(self):
@@ -94,6 +100,10 @@ class CatGame(GameApp):
         self.score = 0
         self.score_text = Text(self, 'Score: 0', 100, 40)
         self.fruits = []
+
+        self.command_map = {
+            'Up': self.get_cat_next_direction_function(self.cat, CAT_UP),
+            'Down': self.get_cat_next_direction_function(self.cat, CAT_DOWN)}
 
     def update_score(self):
         self.score_text.set_text('Score: ' + str(self.score))
@@ -136,11 +146,18 @@ class CatGame(GameApp):
         self.fruits = self.update_and_filter_deleted(self.fruits)
 
     def on_key_pressed(self, event):
-        if event.keysym == 'Up':
-            self.cat.direction = CAT_UP
-        elif event.keysym == 'Down':
-            self.cat.direction = CAT_DOWN
-    
+        ch = event.char.upper()
+
+        if ch in self.command_map:
+            return self.command_map[ch]()
+
+    def get_cat_next_direction_function(self, cat, next_direction):
+
+        def f():
+            cat.set_next_direction(next_direction)
+
+        return f
+
 
 if __name__ == "__main__":
     root = tk.Tk()
