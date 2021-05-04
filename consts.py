@@ -12,3 +12,19 @@ CAT_SPEED = 10
 CAT_MARGIN = 20
 
 CAT_CATCH_DISTANCE = 40
+
+
+SPEED = 10
+
+DIR_STILL = 0
+DIR_UP = 1
+DIR_RIGHT = 2
+DIR_DOWN = 3
+DIR_LEFT = 4
+
+DIR_OFFSETS = {
+    DIR_UP: (0,-1),
+    DIR_RIGHT: (1,0),
+    DIR_DOWN: (0,1),
+    DIR_LEFT: (-1,0),
+}

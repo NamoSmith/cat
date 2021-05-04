@@ -7,6 +7,7 @@ from gamelib import Sprite, GameApp, Text
 
 from consts import *
 
+
 class SlowFruit(Sprite):
     def __init__(self, app, x, y):
         super().__init__(app, 'images/apple.png', x, y)
@@ -73,7 +74,17 @@ class Cat(Sprite):
         super().__init__(app, 'images/cat.png', x, y)
 
         self.app = app
-        self.direction = None
+        self.direction = DIR_STILL
+
+    def wrap_position(self):
+        if self.x < 0:
+            self.x = CANVAS_WIDTH
+        if self.x > CANVAS_WIDTH:
+            self.x = 0
+        if self.y < 0:
+            self.y = CANVAS_HEIGHT
+        if self.y > CANVAS_HEIGHT:
+            self.y = 0
 
     def update(self):
         if self.direction == CAT_UP:
@@ -82,6 +93,8 @@ class Cat(Sprite):
         elif self.direction == CAT_DOWN:
             if self.y <= CANVAS_HEIGHT - CAT_MARGIN:
                 self.y += CAT_SPEED
+
+        self.wrap_position()
 
     def check_collision(self, fruit):
         if self.distance_to(fruit) <= CAT_CATCH_DISTANCE:
@@ -140,12 +153,14 @@ class CatGame(GameApp):
 
         self.fruits = self.update_and_filter_deleted(self.fruits)
 
+        self.cat.wrap_position()
+
     def on_key_pressed(self, event):
         if event.keysym == 'Up':
             self.cat.direction = CAT_UP
         elif event.keysym == 'Down':
             self.cat.direction = CAT_DOWN
-    
+
 
 if __name__ == "__main__":
     root = tk.Tk()
